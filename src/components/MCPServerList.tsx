@@ -1,10 +1,12 @@
 "use client";
 
 import { useState, useEffect } from "react";
-import { X, Plus, Edit, Trash2, Server, Globe, Loader2, RefreshCcw } from "lucide-react";
+import { X, Plus, Edit, Trash2, Server, Globe, Loader2, RefreshCcw, Link2 } from "lucide-react";
 import { MCPServerForm } from "./MCPServerForm";
+import { OAuthStatusBadge, type OAuthStatusType } from "./OAuthStatusBadge";
 import { MCPServerType } from "@/types/mcp";
 import { useQueryClient } from "@tanstack/react-query";
+import { OAuthStatus } from "@/lib/mcp/oauth-detection";
 
 interface MCPServer {
   id: string;
@@ -16,6 +18,9 @@ interface MCPServer {
   env?: Record<string, string>;
   url?: string;
   headers?: Record<string, string>;
+  // OAuth fields
+  requiresAuth?: boolean;
+  oauthStatus?: OAuthStatusType;
   createdAt: string;
   updatedAt: string;
 }
@@ -31,6 +36,7 @@ export function MCPServerList({ isOpen, onClose }: MCPServerListProps) {
   const [showForm, setShowForm] = useState(false);
   const [editingServer, setEditingServer] = useState<MCPServer | undefined>();
   const [deletingId, setDeletingId] = useState<string | null>(null);
+  const [connectingId, setConnectingId] = useState<string | null>(null);
   const queryClient = useQueryClient();
 
   const fetchServers = async () => {
@@ -91,6 +97,41 @@ export function MCPServerList({ isOpen, onClose }: MCPServerListProps) {
       console.error("Failed to delete server:", error);
     } finally {
       setDeletingId(null);
+    }
+  };
+
+  const checkAndConnectOAuth = async (serverId: string) => {
+    setConnectingId(serverId);
+    try {
+      const response = await fetch(`/api/oauth/check/${serverId}`);
+      const data = await response.json();
+
+      if (data.authorizationUrl) {
+        // Redirect to OAuth authorization
+        window.location.href = data.authorizationUrl;
+      } else if (data.error) {
+        console.error("[OAuth] Error from API:", data.error);
+      } else {
+        // Update local state with OAuth status
+        setServers(
+          servers.map((s) =>
+            s.id === serverId
+              ? {
+                  ...s,
+                  oauthStatus: data.connected ? OAuthStatus.CONNECTED : OAuthStatus.NOT_REQUIRED,
+                }
+              : s,
+          ),
+        );
+        // Invalidate MCP tools cache if connected
+        if (data.connected) {
+          queryClient.invalidateQueries({ queryKey: ["mcp-tools"] });
+        }
+      }
+    } catch (error) {
+      console.error("[OAuth] Failed to check/connect OAuth:", error);
+    } finally {
+      setConnectingId(null);
     }
   };
 
@@ -170,7 +211,12 @@ export function MCPServerList({ isOpen, onClose }: MCPServerListProps) {
                           <Globe size={20} className="text-green-500" />
                         )}
                         <div>
-                          <h3 className="font-medium text-gray-900">{server.name}</h3>
+                          <div className="flex items-center gap-2">
+                            <h3 className="font-medium text-gray-900">{server.name}</h3>
+                            {server.type === "http" && (
+                              <OAuthStatusBadge status={server.oauthStatus} />
+                            )}
+                          </div>
                           <div className="text-sm text-gray-500">
                             <span className="mr-2 inline-block rounded bg-gray-100 px-2 py-0.5 text-xs">
                               {server.type}
@@ -186,6 +232,26 @@ export function MCPServerList({ isOpen, onClose }: MCPServerListProps) {
                     </div>
 
                     <div className="flex items-center gap-2">
+                      {/* Connect button for HTTP servers that require OAuth */}
+                      {server.type === "http" &&
+                        (server.oauthStatus === "REQUIRED" ||
+                          server.oauthStatus === "EXPIRED" ||
+                          server.oauthStatus === "UNKNOWN") && (
+                          <button
+                            onClick={() => checkAndConnectOAuth(server.id)}
+                            disabled={connectingId === server.id}
+                            className="flex cursor-pointer items-center gap-1.5 rounded-md bg-blue-500 px-2.5 py-1 text-xs font-medium text-white transition-colors hover:bg-blue-600 disabled:cursor-not-allowed disabled:opacity-50"
+                            title="Connect with OAuth"
+                          >
+                            {connectingId === server.id ? (
+                              <Loader2 size={14} className="animate-spin" />
+                            ) : (
+                              <Link2 size={14} />
+                            )}
+                            Connect
+                          </button>
+                        )}
+
                       <label className="relative inline-flex cursor-pointer items-center">
                         <input
                           type="checkbox"

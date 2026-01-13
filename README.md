@@ -194,6 +194,8 @@ _MCP server configuration form with example filesystem server setup_
 }
 ```
 
+> **Note**: Some HTTP MCP servers require OAuth 2.0 authentication. See [OAuth Documentation](docs/OAUTH.md) for details.
+
 ### Tool Approval Workflow
 
 1. **Agent Requests Tool** - AI suggests using a tool

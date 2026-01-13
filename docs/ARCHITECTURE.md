@@ -473,6 +473,10 @@ Database MCPServer → getMCPServerConfigs() → MultiServerMCPClient → Agent 
 4. **Name Prefixing**: Add server name prefix to prevent conflicts
 5. **Agent Binding**: Bind tools to language model
 
+### OAuth for HTTP Servers
+
+HTTP MCP servers may require OAuth 2.0 authentication. See [OAuth Documentation](OAUTH.md) for the complete flow and implementation details.
+
 ## 📁 File Upload & Storage
 
 The application supports multimodal AI conversations through file uploads. Files are stored in S3-compatible storage (MinIO for development) and processed for AI consumption.

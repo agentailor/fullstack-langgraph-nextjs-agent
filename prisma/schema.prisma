@@ -29,6 +29,12 @@ model MCPServer {
   // For http servers
   url       String?
   headers   Json?
+  // OAuth fields (for http servers)
+  requiresAuth  Boolean?      @default(false)
+  authTokens    Json?         // OAuthTokens: { access_token, refresh_token, expires_at, token_type, scope }
+  clientInfo    Json?         // OAuthClientInformation: { client_id, client_secret, ... }
+  codeVerifier  String?       // PKCE code verifier for ongoing OAuth flow
+  oauthStatus   String?       @default("UNKNOWN") // UNKNOWN | NOT_REQUIRED | REQUIRED | CONNECTED | EXPIRED
   createdAt DateTime          @default(now())
   updatedAt DateTime          @updatedAt
 }

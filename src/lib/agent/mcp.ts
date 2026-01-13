@@ -1,5 +1,9 @@
 import { MultiServerMCPClient } from "@langchain/mcp-adapters";
+import type { OAuthClientProvider } from "@modelcontextprotocol/sdk/client/auth.js";
 import prisma from "@/lib/database/prisma";
+import { ServerOAuthProvider } from "@/lib/mcp/oauth-provider";
+import { OAuthStatus } from "../mcp/oauth-detection";
+import { sanitizeTool } from "./util";
 
 interface StdioMCPServerConfig {
   transport: "stdio";
@@ -12,6 +16,7 @@ interface HttpMCPServerConfig {
   transport: "http";
   url: string;
   headers?: Record<string, string>;
+  authProvider?: OAuthClientProvider;
 }
 
 type MCPServerConfig = StdioMCPServerConfig | HttpMCPServerConfig;
@@ -52,6 +57,11 @@ export async function getMCPServerConfigs(): Promise<Record<string, MCPServerCon
           config.headers = server.headers as Record<string, string>;
         }
 
+        // Add authProvider for servers that require OAuth and have connected
+        if (server.requiresAuth && server.oauthStatus === OAuthStatus.CONNECTED) {
+          config.authProvider = new ServerOAuthProvider(server.id, server.name);
+        }
+
         configs[server.name] = config;
       }
     }
@@ -89,7 +99,8 @@ export async function createMCPClient(): Promise<MultiServerMCPClient | null> {
 }
 
 /**
- * Gets tools from the MCP client if available
+ * Gets tools from the MCP client if available.
+ * Sanitizes tool schemas to be compatible with Google Gemini's function calling API.
  */
 export async function getMCPTools() {
   try {
@@ -99,7 +110,13 @@ export async function getMCPTools() {
     }
 
     const tools = await client.getTools();
-    return tools;
+
+    // Sanitize tool schemas to remove unsupported JSON Schema keywords
+    // that would cause errors with Google Gemini
+    const sanitizedTools = tools.map((tool) => sanitizeTool(tool));
+
+    console.log(`Loaded ${sanitizedTools.length} tools from MCP servers`);
+    return sanitizedTools;
   } catch (error) {
     console.error("Failed to get MCP tools:", error);
     return [];

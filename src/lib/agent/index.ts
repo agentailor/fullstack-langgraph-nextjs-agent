@@ -9,6 +9,7 @@ import {
 } from "./util";
 import { getMCPTools } from "./mcp";
 import { AgentBuilder } from "./builder";
+
 let setupPromise: Promise<void> | null = null;
 
 /**

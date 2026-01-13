@@ -65,6 +65,7 @@ This is a Next.js 15 fullstack AI agent chat application using LangGraph.js with
 - Add servers via `MCPServerForm` → stored in database → loaded dynamically into agent
 - Tool names prefixed with server name to prevent conflicts
 - Server configs support environment variables and command arguments
+- HTTP servers may require OAuth authentication - see [docs/OAUTH.md](docs/OAUTH.md)
 
 ### Tool Approval Workflow
 
