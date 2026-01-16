@@ -33,7 +33,7 @@ export interface AgentConfigOptions {
   approveAllTools?: boolean; // if true, skip tool approval prompts
 }
 
-export /**
+/**
  * JSON Schema keywords that are not supported by Google Gemini's function calling API.
  * These need to be stripped from tool schemas before passing to the LLM.
  */

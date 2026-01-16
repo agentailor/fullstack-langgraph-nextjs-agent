@@ -49,7 +49,7 @@ export async function GET(
     },
   });
 
-  if (!server) {
+  if (!server || !server.url) {
     return NextResponse.json(
       {
         serverId,

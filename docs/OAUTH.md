@@ -39,24 +39,24 @@ OAuth support is implemented using a **lazy detection** approach:
 
 ## OAuth Statuses
 
-| Status         | Description                                    | UI Indicator       |
-| -------------- | ---------------------------------------------- | ------------------ |
-| `UNKNOWN`      | OAuth requirement not yet checked              | None               |
-| `NOT_REQUIRED` | Server does not require OAuth                  | None               |
-| `REQUIRED`     | OAuth required, user needs to connect          | Yellow badge       |
-| `CONNECTED`    | Successfully authenticated                     | Green badge        |
-| `EXPIRED`      | Tokens have expired, reconnection needed       | Red badge          |
+| Status         | Description                              | UI Indicator |
+| -------------- | ---------------------------------------- | ------------ |
+| `UNKNOWN`      | OAuth requirement not yet checked        | None         |
+| `NOT_REQUIRED` | Server does not require OAuth            | None         |
+| `REQUIRED`     | OAuth required, user needs to connect    | Yellow badge |
+| `CONNECTED`    | Successfully authenticated               | Green badge  |
+| `EXPIRED`      | Tokens have expired, reconnection needed | Red badge    |
 
 ## Key Components
 
-| File                                              | Purpose                                      |
-| ------------------------------------------------- | -------------------------------------------- |
-| `src/lib/mcp/oauth-detection.ts`                  | Detects OAuth requirements via 401 response  |
-| `src/lib/mcp/oauth-provider.ts`                   | Implements `OAuthClientProvider` interface   |
-| `src/app/api/oauth/check/[serverId]/route.ts`     | Initiates OAuth flow, returns auth URL       |
-| `src/app/api/oauth/callback/[serverId]/route.ts`  | Handles OAuth callback, exchanges tokens     |
-| `src/components/OAuthStatusBadge.tsx`             | Displays OAuth status in server list         |
-| `src/components/OAuthToast.tsx`                   | Shows success/error notifications            |
+| File                                             | Purpose                                     |
+| ------------------------------------------------ | ------------------------------------------- |
+| `src/lib/mcp/oauth-detection.ts`                 | Detects OAuth requirements via 401 response |
+| `src/lib/mcp/oauth-provider.ts`                  | Implements `OAuthClientProvider` interface  |
+| `src/app/api/oauth/check/[serverId]/route.ts`    | Initiates OAuth flow, returns auth URL      |
+| `src/app/api/oauth/callback/[serverId]/route.ts` | Handles OAuth callback, exchanges tokens    |
+| `src/components/OAuthStatusBadge.tsx`            | Displays OAuth status in server list        |
+| `src/components/OAuthToast.tsx`                  | Shows success/error notifications           |
 
 ## Database Fields
 
@@ -108,10 +108,10 @@ If OAuth is required and no client is registered:
 
 ```env
 # Required for OAuth callback URLs
-APP_URL=http://localhost:3000
+NEXT_PUBLIC_APP_URL=http://localhost:3000
 ```
 
-The `APP_URL` is used to construct the OAuth redirect URI: `{APP_URL}/api/oauth/callback/{serverId}`
+The `NEXT_PUBLIC_APP_URL` is used to construct the OAuth redirect URI: `{NEXT_PUBLIC_APP_URL}/api/oauth/callback/{serverId}`
 
 ## Production Considerations
 
@@ -124,13 +124,13 @@ The `APP_URL` is used to construct the OAuth redirect URI: `{APP_URL}/api/oauth/
 
 ### Additional Security Measures
 
-| Concern                  | Recommendation                                                        |
-| ------------------------ | --------------------------------------------------------------------- |
-| Token refresh            | Implement automatic token refresh before expiration                   |
-| CSRF protection          | Tie OAuth state parameter to user sessions                            |
-| Audit logging            | Log OAuth events (connections, refreshes, failures)                   |
-| Rate limiting            | Add rate limits to OAuth endpoints to prevent abuse                   |
-| Transport security       | Ensure all OAuth callbacks use HTTPS in production                    |
+| Concern            | Recommendation                                      |
+| ------------------ | --------------------------------------------------- |
+| Token refresh      | Implement automatic token refresh before expiration |
+| CSRF protection    | Tie OAuth state parameter to user sessions          |
+| Audit logging      | Log OAuth events (connections, refreshes, failures) |
+| Rate limiting      | Add rate limits to OAuth endpoints to prevent abuse |
+| Transport security | Ensure all OAuth callbacks use HTTPS in production  |
 
 ### Multi-tenant Considerations
 

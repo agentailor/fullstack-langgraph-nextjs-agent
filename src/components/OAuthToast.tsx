@@ -26,15 +26,19 @@ export function OAuthToast() {
           ? `Successfully connected to "${serverName}"`
           : "OAuth connection successful",
       });
-      // Clean up URL params
-      router.replace("/", { scroll: false });
+      // Clean up URL params and redirect to original path
+      const returnPath = sessionStorage.getItem("oauth_return_path") || "/";
+      sessionStorage.removeItem("oauth_return_path");
+      router.replace(returnPath, { scroll: false });
     } else if (oauthError) {
       setToast({
         type: "error",
         message: `OAuth error: ${oauthError}`,
       });
-      // Clean up URL params
-      router.replace("/", { scroll: false });
+      // Clean up URL params and redirect to original path
+      const returnPath = sessionStorage.getItem("oauth_return_path") || "/";
+      sessionStorage.removeItem("oauth_return_path");
+      router.replace(returnPath, { scroll: false });
     }
   }, [searchParams, router]);
 

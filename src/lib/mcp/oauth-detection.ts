@@ -86,7 +86,7 @@ export async function updateServerOAuthStatus(
  */
 export function isTokenExpired(tokens: { expires_at?: number } | null | undefined): boolean {
   if (!tokens || !tokens.expires_at) {
-    return false; // No expiry info, assume valid
+    return true; // No expiry info, assume expired
   }
   // Add 60 second buffer before actual expiry
   return Date.now() / 1000 > tokens.expires_at - 60;

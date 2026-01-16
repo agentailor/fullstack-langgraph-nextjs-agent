@@ -107,21 +107,31 @@ export function MCPServerList({ isOpen, onClose }: MCPServerListProps) {
       const data = await response.json();
 
       if (data.authorizationUrl) {
+        // Store current path to return after OAuth
+        sessionStorage.setItem("oauth_return_path", window.location.pathname);
         // Redirect to OAuth authorization
         window.location.href = data.authorizationUrl;
       } else if (data.error) {
         console.error("[OAuth] Error from API:", data.error);
       } else {
         // Update local state with OAuth status
-        setServers(
-          servers.map((s) =>
-            s.id === serverId
-              ? {
-                  ...s,
-                  oauthStatus: data.connected ? OAuthStatus.CONNECTED : OAuthStatus.NOT_REQUIRED,
-                }
-              : s,
-          ),
+        setServers((prevServers) =>
+          prevServers.map((s) => {
+            if (s.id !== serverId) return s;
+            let newStatus: OAuthStatusType;
+            if (data.connected) {
+              newStatus = OAuthStatus.CONNECTED;
+            } else if (s.oauthStatus === OAuthStatus.REQUIRED) {
+              // Preserve REQUIRED status if we are still not connected
+              newStatus = OAuthStatus.REQUIRED;
+            } else {
+              newStatus = OAuthStatus.NOT_REQUIRED;
+            }
+            return {
+              ...s,
+              oauthStatus: newStatus,
+            };
+          }),
         );
         // Invalidate MCP tools cache if connected
         if (data.connected) {
