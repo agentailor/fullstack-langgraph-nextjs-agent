@@ -1,8 +1,10 @@
 "use client";
+import { Suspense } from "react";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import "./globals.css";
 import { ThreadProvider } from "@/contexts/ThreadContext";
 import { UISettingsProvider } from "@/contexts/UISettingsContext";
+import { OAuthToast } from "@/components/OAuthToast";
 
 const queryClient = new QueryClient({
   defaultOptions: {
@@ -21,7 +23,12 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
       <body>
         <QueryClientProvider client={queryClient}>
           <UISettingsProvider>
-            <ThreadProvider>{children}</ThreadProvider>
+            <ThreadProvider>
+              <Suspense fallback={null}>
+                <OAuthToast />
+              </Suspense>
+              {children}
+            </ThreadProvider>
           </UISettingsProvider>
         </QueryClientProvider>
       </body>

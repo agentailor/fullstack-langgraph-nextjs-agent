@@ -56,7 +56,13 @@ export async function GET(req: NextRequest) {
           const iterable = await streamResponse({
             threadId,
             userText: userContent,
-            opts: { model, tools, allowTool: allowTool || undefined, approveAllTools, attachments },
+            opts: {
+              model,
+              tools,
+              allowTool: allowTool || undefined,
+              approveAllTools,
+              attachments,
+            },
           });
           for await (const chunk of iterable) {
             // Only forward AI/tool chunks; ignore human/system
