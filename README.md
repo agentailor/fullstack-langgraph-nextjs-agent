@@ -168,6 +168,8 @@ Visit [http://localhost:3000](http://localhost:3000) to start chatting with your
 ![Add MCP Server](docs/images/add-mcp-server.png)
 _MCP server configuration form with example filesystem server setup_
 
+> **Want to build your own MCP server?** Check out [create-mcp-server](https://github.com/agentailor/create-mcp-server) - scaffold production-ready MCP servers in seconds with TypeScript, multiple frameworks (MCP SDK or FastMCP), and built-in debugging tools.
+
 ### Example MCP Server Configurations
 
 #### Filesystem Server (stdio)
