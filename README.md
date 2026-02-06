@@ -6,11 +6,25 @@
 
 _Complete agent workflow: user input → tool approval → execution → streaming response_
 
-[![TypeScript](https://img.shields.io/badge/TypeScript-5.0-blue?logo=typescript)](https://www.typescriptlang.org/)
-[![Next.js](https://img.shields.io/badge/Next.js-15.4-black?logo=next.js)](https://nextjs.org/)
-[![LangGraph](https://img.shields.io/badge/LangGraph.js-0.4-green?logo=langchain)](https://langchain-ai.github.io/langgraphjs/)
+[![TypeScript](https://img.shields.io/badge/TypeScript-5.9-blue?logo=typescript)](https://www.typescriptlang.org/)
+[![Next.js](https://img.shields.io/badge/Next.js-15.5-black?logo=next.js)](https://nextjs.org/)
+[![LangGraph](https://img.shields.io/badge/LangGraph.js-1.0-green?logo=langchain)](https://langchain-ai.github.io/langgraphjs/)
 [![PostgreSQL](https://img.shields.io/badge/PostgreSQL-16+-blue?logo=postgresql)](https://www.postgresql.org/)
-[![Prisma](https://img.shields.io/badge/Prisma-5.19-2D3748?logo=prisma)](https://www.prisma.io/)
+[![Prisma](https://img.shields.io/badge/Prisma-6.16-2D3748?logo=prisma)](https://www.prisma.io/)
+
+---
+
+## Need help taking this to production?
+
+I help teams design and optimize LangGraph-based AI agents (RAG, memory, latency, architecture).
+
+If you're building something serious on top of this template and want hands-on help:
+
+→ [DM me on LinkedIn](https://www.linkedin.com/in/ali-ibrahim-junior/)
+
+Happy to jump on a short call.
+
+---
 
 ## Features
 
