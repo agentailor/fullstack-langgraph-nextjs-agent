@@ -383,3 +383,7 @@ This project is licensed under the MIT License - see the [LICENSE](LICENSE) file
 **Ready to build your next AI agent?**
 
 [Get Started](#quick-start)
+
+---
+
+If this repo helped you and you’d like guidance implementing it in production, feel free to reach out on [LinkedIn](https://www.linkedin.com/in/ali-ibrahim-junior/).
