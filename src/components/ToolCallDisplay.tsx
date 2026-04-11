@@ -26,6 +26,7 @@ const ToolCallItem: React.FC<{
   showApprovalButtons?: boolean;
 }> = ({ name, args, id, approvalCallbacks, showApprovalButtons }) => {
   const [isExpanded, setIsExpanded] = useState(false);
+  const [responded, setResponded] = useState(false);
 
   return (
     <div className="rounded-r border-l-4 border-gray-200 bg-gray-200/30 p-3">
@@ -49,17 +50,23 @@ const ToolCallItem: React.FC<{
         </div>
       )}
 
-      {showApprovalButtons && id && approvalCallbacks && (
+      {showApprovalButtons && id && approvalCallbacks && !responded && (
         <div className="mt-3 flex justify-end gap-2">
           <button
-            onClick={() => approvalCallbacks.onDeny(id)}
+            onClick={() => {
+              setResponded(true);
+              approvalCallbacks.onDeny(id);
+            }}
             className="flex items-center gap-1 rounded border border-red-200 px-3 py-1 text-sm font-medium text-red-700 transition-colors hover:bg-red-100"
           >
             <X className="h-3 w-3" />
             Deny
           </button>
           <button
-            onClick={() => approvalCallbacks.onApprove(id)}
+            onClick={() => {
+              setResponded(true);
+              approvalCallbacks.onApprove(id);
+            }}
             className="flex items-center gap-1 rounded border border-green-200 px-3 py-1 text-sm font-medium text-green-700 transition-colors hover:bg-green-100"
           >
             <Check className="h-3 w-3" />
