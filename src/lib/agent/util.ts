@@ -140,12 +140,52 @@ function sanitizeSchema(schema: unknown): Record<string, unknown> | unknown {
       continue;
     }
 
+    // Special handling for "properties" - preserve all property names (they are not schema keywords),
+    // but sanitize each property's sub-schema recursively
+    if (key === "properties" && value && typeof value === "object" && !Array.isArray(value)) {
+      const propsObj = value as Record<string, unknown>;
+      const sanitizedProps: Record<string, unknown> = {};
+      for (const [propName, propSchema] of Object.entries(propsObj)) {
+        sanitizedProps[propName] = sanitizeSchema(propSchema); // sanitize the sub-schema, not the name
+      }
+      sanitized[key] = sanitizedProps;
+      continue;
+    }
+
+    // Special handling for "required" - filter out properties that don't exist in "properties"
+    if (key === "required" && Array.isArray(value)) {
+      const properties = schemaObj["properties"];
+      if (properties && typeof properties === "object" && !Array.isArray(properties)) {
+        const validProps = Object.keys(properties as Record<string, unknown>);
+        const filtered = value.filter(
+          (prop) => typeof prop === "string" && validProps.includes(prop),
+        );
+        if (filtered.length > 0) {
+          sanitized[key] = filtered;
+        }
+      } else {
+        sanitized[key] = value;
+      }
+      continue;
+    }
+
     // Recursively sanitize nested objects and arrays
     if (value && typeof value === "object") {
       sanitized[key] = sanitizeSchema(value);
     } else {
       sanitized[key] = value;
     }
+  }
+
+  // Remove empty "properties" object - Gemini rejects tools with no parameters defined
+  if (
+    "properties" in sanitized &&
+    typeof sanitized["properties"] === "object" &&
+    sanitized["properties"] !== null &&
+    Object.keys(sanitized["properties"] as Record<string, unknown>).length === 0
+  ) {
+    delete sanitized["properties"];
+    delete sanitized["required"]; // required is meaningless without properties
   }
 
   return sanitized;
