@@ -2,11 +2,11 @@ services:
   db:
     image: postgres:17-alpine
     environment:
-      POSTGRES_USER: user
-      POSTGRES_PASSWORD: password
-      POSTGRES_DB: mydb
+      POSTGRES_USER: ${POSTGRES_USER:-user}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD:-password}
+      POSTGRES_DB: ${POSTGRES_DB:-mydb}
     ports:
-      - "5434:5432"
+      - "${POSTGRES_PORT:-5434}:5432"
     volumes:
       - db_data:/var/lib/postgresql/data
 
@@ -16,11 +16,11 @@ services:
     container_name: minio
     command: server /data --console-address ":9001"
     environment:
-      MINIO_ROOT_USER: minioadmin
-      MINIO_ROOT_PASSWORD: minioadmin
+      MINIO_ROOT_USER: ${S3_ACCESS_KEY_ID:-minioadmin}
+      MINIO_ROOT_PASSWORD: ${S3_SECRET_ACCESS_KEY:-minioadmin}
     ports:
-      - "9000:9000" # S3 API
-      - "9001:9001" # MinIO Console (Web UI)
+      - "${S3_API_PORT:-9000}:9000" # S3 API
+      - "${S3_CONSOLE_PORT:-9001}:9001" # MinIO Console (Web UI)
     volumes:
       - minio_data:/data
     healthcheck:
@@ -38,9 +38,9 @@ services:
     restart: on-failure
     entrypoint: >
       /bin/sh -c "
-      /usr/bin/mc alias set localminio http://minio:9000 minioadmin minioadmin;
-      /usr/bin/mc mb localminio/uploads --ignore-existing;
-      /usr/bin/mc anonymous set download localminio/uploads;
+      /usr/bin/mc alias set localminio http://minio:9000 ${S3_ACCESS_KEY_ID:-minioadmin} ${S3_SECRET_ACCESS_KEY:-minioadmin};
+      /usr/bin/mc mb localminio/${S3_BUCKET_NAME:-uploads} --ignore-existing;
+      /usr/bin/mc anonymous set download localminio/${S3_BUCKET_NAME:-uploads};
       exit 0;
       "
 
