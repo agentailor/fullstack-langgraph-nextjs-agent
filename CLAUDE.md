@@ -49,7 +49,7 @@ This is a Next.js 15 fullstack AI agent chat application using LangGraph.js with
 
 ### Key Components Structure
 
-- **Context Providers**: `ThreadContext` (active thread), `UISettingsContext` (UI state)
+- **Context Providers**: `ThreadContext` (active thread), `UISettingsContext` (UI state + model settings persisted to `localStorage` under `agent_model_settings`)
 - **Custom Hooks**: `useChatThread`, `useMCPTools`, `useThreads` for data domains
 - **Message Components**: Separate components for AI/Human/Tool/Error message types
 - **Agent Services**: `src/services/agentService.ts` handles streaming, `src/services/chatService.ts` manages UI state
@@ -79,12 +79,12 @@ This is a Next.js 15 fullstack AI agent chat application using LangGraph.js with
 
 - `ensureAgent()` ensures Postgres checkpointer is initialized before agent creation
 - MCP servers queried from database on each agent creation for dynamic tool loading
-- Supports OpenAI/Google models via `AgentConfigOptions`
+- Supports OpenAI/Google/Anthropic models via `AgentConfigOptions`
 
 ### API Route Patterns
 
 - Stream endpoints use `dynamic = "force-dynamic"` and `runtime = "nodejs"`
-- Query params for streaming: `content`, `threadId`, `model`, `allowTool`, `approveAllTools`
+- Query params for streaming: `content`, `threadId`, `model`, `provider`, `allowTool`, `approveAllTools`
 - MCP server CRUD follows REST patterns in `/api/mcp-servers/route.ts`
 - File upload endpoint: `/api/agent/upload` accepts multipart/form-data, returns file metadata
 

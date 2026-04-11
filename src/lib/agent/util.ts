@@ -1,10 +1,11 @@
 import { ChatOpenAI } from "@langchain/openai";
 import { ChatGoogleGenerativeAI } from "@langchain/google-genai";
+import { ChatAnthropic } from "@langchain/anthropic";
 import { BaseChatModel } from "@langchain/core/language_models/chat_models";
 import { DynamicStructuredTool } from "@langchain/core/tools";
 
 export interface CreateChatModelOptions {
-  provider?: string; // 'openai' | 'google' | others later
+  provider?: string; // 'openai' | 'google' | 'anthropic'
   model: string;
   temperature?: number;
 }
@@ -20,6 +21,8 @@ export function createChatModel({
   switch (provider) {
     case "openai":
       return new ChatOpenAI({ model, temperature });
+    case "anthropic":
+      return new ChatAnthropic({ model, temperature });
     case "google":
     default:
       return new ChatGoogleGenerativeAI({ model, temperature });

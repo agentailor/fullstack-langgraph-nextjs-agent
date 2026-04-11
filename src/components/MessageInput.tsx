@@ -19,15 +19,20 @@ export const MessageInput = ({
 }: MessageInputProps) => {
   const [message, setMessage] = useState("");
   const [isFocused, setIsFocused] = useState(false);
-  const [provider, setProvider] = useState<string>("google");
-  const [model, setModel] = useState<string>("gemini-3-flash-preview");
-  const [approveAllTools, setApproveAllTools] = useState<boolean>(false);
   const [settingsExpanded, setSettingsExpanded] = useState<boolean>(false);
   const [attachments, setAttachments] = useState<FileAttachment[]>([]);
   const [isUploading, setIsUploading] = useState(false);
 
-  // UI settings for toggling tool messages
-  const { hideToolMessages, toggleToolMessages } = useUISettings();
+  const {
+    hideToolMessages,
+    toggleToolMessages,
+    provider,
+    setProvider,
+    model,
+    setModel,
+    approveAllTools,
+    setApproveAllTools,
+  } = useUISettings();
 
   const textareaRef = useRef<HTMLTextAreaElement>(null);
   const fileInputRef = useRef<HTMLInputElement>(null);
@@ -109,6 +114,7 @@ export const MessageInput = ({
 
     await onSendMessage(message, {
       model,
+      provider,
       tools: [],
       approveAllTools: approveAllTools,
       attachments: attachments.length > 0 ? attachments : undefined,

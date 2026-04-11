@@ -15,6 +15,7 @@ export interface FileAttachment {
 
 export interface MessageOptions {
   model?: string;
+  provider?: string;
   tools?: string[];
   allowTool?: "allow" | "deny";
   approveAllTools?: boolean; // if true, skip tool approval prompts

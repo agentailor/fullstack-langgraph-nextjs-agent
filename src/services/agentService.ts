@@ -30,6 +30,7 @@ export async function streamResponse(params: {
 
     const agent = await ensureAgent({
       model: opts?.model,
+      provider: opts?.provider,
       tools: opts?.tools,
       approveAllTools: opts?.approveAllTools,
     });
@@ -64,6 +65,7 @@ export async function streamResponse(params: {
 
   const agent = await ensureAgent({
     model: opts?.model,
+    provider: opts?.provider,
     tools: opts?.tools,
     approveAllTools: opts?.approveAllTools,
   });

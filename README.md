@@ -73,11 +73,17 @@ Happy to jump on a short call.
 - Type-safe message handling
 - Error recovery and graceful degradation
 
+### **Persistent Model Settings**
+
+- Provider and model selection saved to `localStorage` automatically
+- Settings survive page reloads and thread navigation
+- No backend required — zero latency reads on startup
+
 ### **Modern Tech Stack**
 
 - **Frontend**: Next.js 15, React 19, TypeScript, Tailwind CSS
 - **Backend**: Node.js, Prisma ORM, PostgreSQL, MinIO/S3
-- **AI**: LangGraph.js, OpenAI/Google models
+- **AI**: LangGraph.js, OpenAI/Google/Anthropic models
 - **UI**: shadcn/ui components, Lucide icons
 
 ## Quick Start
@@ -86,7 +92,7 @@ Happy to jump on a short call.
 
 - Node.js 18+ and pnpm
 - Docker (for PostgreSQL and MinIO)
-- OpenAI API key or Google AI API key
+- OpenAI API key, Google AI API key, or Anthropic API key
 
 ### 1. Clone and Install
 
@@ -108,12 +114,13 @@ Edit `.env.local` with your configuration:
 # Database
 DATABASE_URL="postgresql://user:password@localhost:5434/agent_db"
 
-# AI Models (choose one or both)
+# AI Models (choose one or more)
 OPENAI_API_KEY="sk-..."
 GOOGLE_API_KEY="..."
+ANTHROPIC_API_KEY="sk-ant-..."
 
 # Optional: Default model
-DEFAULT_MODEL="gpt-4o-mini"  # or "gemini-1.5-flash"
+DEFAULT_MODEL="gpt-4o-mini"  # or "gemini-1.5-flash" or "claude-sonnet-4-5"
 ```
 
 ### 3. Start Services

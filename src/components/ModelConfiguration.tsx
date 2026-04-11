@@ -20,6 +20,7 @@ export const ModelConfiguration = ({
   setModel,
 }: ModelConfigurationProps) => {
   const [showMCPTooltip, setShowMCPTooltip] = useState(false);
+  const [imgError, setImgError] = useState(false);
   const editContainerRef = useRef<HTMLDivElement | null>(null);
   const mcpTooltipRef = useRef<HTMLDivElement | null>(null);
 
@@ -51,25 +52,36 @@ export const ModelConfiguration = ({
         </label>
         <div className="flex items-center gap-3">
           <span className="inline-flex h-6 w-6 items-center justify-center overflow-hidden rounded bg-gray-200 dark:bg-gray-700">
-            <Image
-              src={`/${provider.toLowerCase()}.svg`}
-              alt={provider}
-              width={24}
-              height={24}
-              className="object-contain p-0.5"
-              onError={(e) => {
-                e.currentTarget.style.display = "none";
-              }}
-            />
-            <BrainCog className="h-4 w-4" />
+            {!imgError && (
+              <Image
+                src={`/${provider.toLowerCase()}.svg`}
+                alt={provider}
+                width={24}
+                height={24}
+                className="object-contain p-0.5"
+                onError={() => setImgError(true)}
+              />
+            )}
+            {imgError && <BrainCog className="h-4 w-4" />}
           </span>
           <select
             value={provider}
-            onChange={(e) => setProvider(e.target.value)}
+            onChange={(e) => {
+              const newProvider = e.target.value;
+              setImgError(false);
+              setProvider(newProvider);
+              const defaults: Record<string, string> = {
+                google: "gemini-3-flash-preview",
+                openai: "gpt-4o",
+                anthropic: "claude-sonnet-4-5",
+              };
+              setModel(defaults[newProvider] ?? "");
+            }}
             className="flex-1 rounded border border-gray-300 bg-white px-3 py-1.5 text-sm focus:border-blue-500 focus:ring-1 focus:ring-blue-500 focus:outline-none dark:border-gray-600 dark:bg-gray-800 dark:text-gray-200"
           >
             <option value="google">Google</option>
             <option value="openai">OpenAI</option>
+            <option value="anthropic">Anthropic</option>
           </select>
         </div>
       </div>
