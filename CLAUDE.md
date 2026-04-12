@@ -137,6 +137,15 @@ To switch to AWS S3, Cloudflare R2, or other S3-compatible storage:
 - `@aws-sdk/lib-storage` - Multipart uploads for large files
 - Storage utilities in `src/lib/storage/`
 
+## Langfuse Observability
+
+LLM tracing is implemented via two mechanisms — see [docs/OBSERVABILITY.md](docs/OBSERVABILITY.md) for full setup instructions.
+
+- **`instrumentation.ts`** (project root): Next.js calls `register()` once before any route; initializes the OTel SDK with `LangfuseSpanProcessor` when `LANGFUSE_ENABLED=true`
+- **`src/services/agentService.ts`**: Conditionally attaches `CallbackHandler` to each `agent.stream()` call for LangGraph-specific traces (LLM calls, tool invocations, token counts)
+- Toggle tracing: set `LANGFUSE_ENABLED=true/false` in `.env` — no code changes needed
+- Works with Langfuse Cloud or a self-hosted Docker instance
+
 ## Important Notes
 
 - Always run `pnpm prisma:generate` after schema changes

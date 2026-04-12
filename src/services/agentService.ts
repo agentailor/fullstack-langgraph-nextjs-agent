@@ -6,6 +6,11 @@ import { getHistory } from "@/lib/agent/memory";
 import { BaseMessage, HumanMessage } from "@langchain/core/messages";
 import { Command } from "@langchain/langgraph";
 import { processAttachmentsForAI } from "@/lib/storage/content";
+import { CallbackHandler } from "@langfuse/langchain";
+
+// Only instantiate when tracing is explicitly enabled to avoid silent errors
+// when Langfuse credentials are absent.
+const langfuseHandler = process.env.LANGFUSE_ENABLED === "true" ? new CallbackHandler() : null;
 
 /**
  * Returns an async iterable producing incremental AI text chunks for a user text input.
@@ -40,6 +45,7 @@ export async function streamResponse(params: {
     const iterable = await agent.stream(inputs as any, {
       streamMode: ["updates"],
       configurable: { thread_id: threadId },
+      ...(langfuseHandler ? { callbacks: [langfuseHandler] } : {}),
     });
 
     return generator(iterable);
@@ -75,6 +81,7 @@ export async function streamResponse(params: {
   const iterable = await agent.stream(inputs as any, {
     streamMode: ["updates"],
     configurable: { thread_id: threadId },
+    ...(langfuseHandler ? { callbacks: [langfuseHandler] } : {}),
   });
 
   return generator(iterable);

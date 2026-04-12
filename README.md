@@ -79,6 +79,13 @@ Happy to jump on a short call.
 - Settings survive page reloads and thread navigation
 - No backend required — zero latency reads on startup
 
+### **LLM Observability with Langfuse**
+
+- End-to-end tracing of agent runs, LLM calls, tool invocations, and token usage
+- Works with [Langfuse Cloud](https://cloud.langfuse.com) or a self-hosted instance
+- Toggle via `LANGFUSE_ENABLED` env var — zero overhead when disabled
+- See [docs/OBSERVABILITY.md](docs/OBSERVABILITY.md) for setup instructions
+
 ### **Modern Tech Stack**
 
 - **Frontend**: Next.js 15, React 19, TypeScript, Tailwind CSS
@@ -140,6 +147,8 @@ pnpm prisma:migrate
 
 ```bash
 pnpm dev
+# Or use custom port
+pnpm dev --port=3005
 ```
 
 Visit [http://localhost:3000](http://localhost:3000) to start chatting with your AI agent!

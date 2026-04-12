@@ -15,6 +15,7 @@ This document provides a comprehensive overview of the LangGraph.js AI Agent Tem
 9. [Streaming Architecture](#streaming-architecture)
 10. [Error Handling](#error-handling)
 11. [Performance Considerations](#performance-considerations)
+12. [Observability](./OBSERVABILITY.md)
 
 ## 🌐 System Overview
 
