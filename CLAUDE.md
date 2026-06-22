@@ -146,6 +146,15 @@ LLM tracing is implemented via two mechanisms — see [docs/OBSERVABILITY.md](do
 - Toggle tracing: set `LANGFUSE_ENABLED=true/false` in `.env` — no code changes needed
 - Works with Langfuse Cloud or a self-hosted Docker instance
 
+## OpenAPI / API Docs
+
+Machine-readable OpenAPI 3.1 spec generated from per-route Zod schemas — see [docs/API.md](docs/API.md).
+
+- **`src/lib/api/openapi/`**: `zod.ts` (re-exports `z` after `extendZodWithOpenApi` — import `z` from here), `registry.ts` (shared `OpenAPIRegistry`), `routes.ts` (barrel importing every route's `schema.ts` for its `registerPath` side effects), `document.ts` (`buildOpenApiDocument()` with doc metadata), `common.ts` (shared `ErrorResponse`/`UploadErrorResponse`/`SuccessResponse`)
+- **Co-located pattern**: each route has a sibling `schema.ts` defining Zod schemas (`.openapi("Name")`) and calling `registry.registerPath(...)`; the handler validates input with `.safeParse()`. When adding a route, also add its import to `routes.ts`
+- **Served at**: `/api/openapi` (JSON via `src/app/api/openapi/route.ts`) and `/api-docs` (Scalar viewer via `src/app/api-docs/route.ts`)
+- Validate the spec: `curl /api/openapi -o openapi.json && npx @redocly/cli lint openapi.json` (config in `redocly.yaml` — disables `security-defined` since the template has no API auth)
+
 ## Important Notes
 
 - Always run `pnpm prisma:generate` after schema changes

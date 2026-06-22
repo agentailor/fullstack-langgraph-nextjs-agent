@@ -1,0 +1,14 @@
+# Redocly lint config for the generated OpenAPI spec (served at /api/openapi).
+# Generate the spec to a file first, e.g.:
+#   curl http://localhost:3000/api/openapi -o openapi.json
+#   npx @redocly/cli lint openapi.json
+rules:
+  # The template ships no API authentication, so operations have no security scheme.
+  security-defined: off
+  # operationId is set on every operation; keep this on as a guard.
+  operation-operationId: warn
+  # The OAuth callback intentionally returns only a 302 redirect (no JSON body).
+  operation-2xx-response: off
+  operation-4xx-response: off
+  # Template, not a published API — no license block required.
+  info-license: off

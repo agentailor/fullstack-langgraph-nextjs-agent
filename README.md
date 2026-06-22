@@ -295,6 +295,12 @@ _MCP server configuration form with example filesystem server setup_
 
 For detailed architecture documentation, see [docs/ARCHITECTURE.md](docs/ARCHITECTURE.md).
 
+## API Documentation
+
+The app serves an interactive OpenAPI 3.1 explorer at **`/api-docs`** and the raw spec at
+**`/api/openapi`** — generated from per-route Zod schemas. See [docs/API.md](docs/API.md) for how
+it works and how to document new routes.
+
 ## Development
 
 ### Available Scripts

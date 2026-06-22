@@ -1,6 +1,7 @@
 import { NextResponse } from "next/server";
 import prisma from "@/lib/database/prisma";
 import { MCPServerType } from "@/types/mcp";
+import { UpdateMCPServerBody } from "./schema";
 
 export async function GET() {
   try {
@@ -55,12 +56,11 @@ export async function POST(request: Request) {
 
 export async function PATCH(request: Request) {
   try {
-    const body = await request.json();
-    const { id, name, type, command, args, env, url, headers, enabled } = body;
-
-    if (!id) {
+    const parsed = UpdateMCPServerBody.safeParse(await request.json());
+    if (!parsed.success) {
       return NextResponse.json({ error: "ID is required" }, { status: 400 });
     }
+    const { id, name, type, command, args, env, url, headers, enabled } = parsed.data;
 
     const updateData: Record<string, unknown> = {};
     if (name !== undefined) updateData.name = name;

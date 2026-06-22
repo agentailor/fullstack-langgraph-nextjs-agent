@@ -1,6 +1,7 @@
 import { NextRequest, NextResponse } from "next/server";
 import type { Thread } from "@/types/message";
 import prisma from "@/lib/database/prisma";
+import { UpdateThreadBody, DeleteThreadBody } from "./schema";
 
 export const dynamic = "force-dynamic";
 export const runtime = "nodejs";
@@ -35,11 +36,11 @@ export async function POST() {
 
 export async function PATCH(req: NextRequest) {
   try {
-    const body = await req.json();
-    const { id, title } = body || {};
-    if (!id || typeof title !== "string") {
+    const parsed = UpdateThreadBody.safeParse(await req.json());
+    if (!parsed.success) {
       return NextResponse.json({ error: "id and title required" }, { status: 400 });
     }
+    const { id, title } = parsed.data;
     const updated = await prisma.thread.update({ where: { id }, data: { title } });
     return NextResponse.json(
       {
@@ -58,11 +59,11 @@ export async function PATCH(req: NextRequest) {
 
 export async function DELETE(req: NextRequest) {
   try {
-    const body = await req.json();
-    const { id } = body || {};
-    if (!id || typeof id !== "string") {
+    const parsed = DeleteThreadBody.safeParse(await req.json());
+    if (!parsed.success) {
       return NextResponse.json({ error: "Thread id required" }, { status: 400 });
     }
+    const { id } = parsed.data;
 
     // First check if thread exists
     const thread = await prisma.thread.findUnique({ where: { id } });
