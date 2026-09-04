@@ -5,8 +5,16 @@ ignoredBuiltDependencies:
 
 overrides:
   "@modelcontextprotocol/sdk@<1.24.0": ">=1.24.0"
-  body-parser@>=2.2.0 <2.2.1: ">=2.2.1"
   js-yaml@>=4.0.0 <4.1.1: ">=4.1.1"
   jws@<3.2.3: ">=3.2.3"
   mdast-util-to-hast@>=13.0.0 <13.2.1: ">=13.2.1"
   next@>=15.5.0-canary.0 <15.5.7: ">=15.5.7"
+  langsmith@<0.6.0: ">=0.6.0"
+  protobufjs@<7.6.1: ">=7.6.1"
+  "@grpc/grpc-js@<1.14.4": ">=1.14.4"
+  "@opentelemetry/propagator-jaeger@<2.9.0": ">=2.9.0"
+  hono@<4.12.34: ">=4.12.34"
+  fast-uri@<3.1.6: ">=3.1.6"
+  path-to-regexp@<8.4.0: ">=8.4.0"
+  ip-address@<10.3.1: ">=10.3.1"
+  body-parser@>=2.0.0 <2.3.0: ">=2.3.0"
