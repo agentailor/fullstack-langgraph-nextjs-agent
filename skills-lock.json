@@ -1,0 +1,23 @@
+{
+  "version": 1,
+  "skills": {
+    "agent-eval-cases": {
+      "source": "agentailor/skills",
+      "sourceType": "github",
+      "skillPath": "agent-eval-cases/SKILL.md",
+      "computedHash": "0aefc75a491df12b649317939f1c1793e6fb2327a65a411e221a44e91300a5c6"
+    },
+    "agent-prompt-engineering": {
+      "source": "agentailor/skills",
+      "sourceType": "github",
+      "skillPath": "agent-prompt-engineering/SKILL.md",
+      "computedHash": "7f614a712dcff4fd36f51b9a814c9a894b65ba6ab53030b35315db801c0fc025"
+    },
+    "tool-design": {
+      "source": "agentailor/skills",
+      "sourceType": "github",
+      "skillPath": "tool-design/SKILL.md",
+      "computedHash": "be0cc48e04a1548abe2659532104eeffcb472bf1abf17e8a20e12cde12df39aa"
+    }
+  }
+}
