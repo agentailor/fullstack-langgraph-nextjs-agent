@@ -14,6 +14,15 @@ _Complete agent workflow: user input → tool approval → execution → streami
 
 ---
 
+## Built with this template: Cameron
+
+[**Cameron**](https://github.com/agentailor/cameron) is a personal finance agent that started from this
+template and was built in public, one tagged release per article. If you want to see where this scaffold
+goes once it becomes a real agent — human-in-the-loop approval on every money-moving action, self-hosted
+data, a full LangGraph workflow — read its source as a worked example.
+
+---
+
 ## Need help taking this to production?
 
 I help teams design and optimize LangGraph-based AI agents (RAG, memory, latency, architecture).
@@ -318,6 +327,20 @@ pnpm prisma:generate    # Generate Prisma client (after schema changes)
 pnpm prisma:migrate     # Create and apply migrations
 pnpm prisma:studio      # Open Prisma Studio (database UI)
 ```
+
+### Agent Skills
+
+This repo ships [Agent Skills](https://github.com/agentailor/skills) in [.agents/skills/](.agents/skills/),
+pinned by `skills-lock.json`. They give any skill-aware coding agent (Claude Code and friends) the
+conventions for working on an agent codebase like this one:
+
+| Skill                                                                          | Use it when                                                        |
+| ------------------------------------------------------------------------------ | ------------------------------------------------------------------ |
+| [`agent-prompt-engineering`](.agents/skills/agent-prompt-engineering/SKILL.md) | Writing or auditing the agent’s system prompt                      |
+| [`tool-design`](.agents/skills/tool-design/SKILL.md)                           | Adding or reviewing a tool / MCP server the agent calls            |
+| [`agent-eval-cases`](.agents/skills/agent-eval-cases/SKILL.md)                 | Deciding what agent behavior deserves an eval case, and writing it |
+
+Agent guidance for this repo lives in [AGENTS.md](AGENTS.md) (with [CLAUDE.md](CLAUDE.md) pointing to it).
 
 ### Project Structure
 
